@@ -1,0 +1,523 @@
+{
+  "name": "Бизнес Ассистент",
+  "nodes": [
+    {
+      "parameters": {
+        "name": "emailAgent",
+        "description": "Call this tool for any email actions.",
+        "workflowId": {
+          "__rl": true,
+          "value": "NAoThhBoXe0gxO3W",
+          "mode": "list",
+          "cachedResultName": "EMAIL ASSISTENTA"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        840,
+        120
+      ],
+      "id": "1cc3f289-2fb2-42cd-8a29-3c69a5cd787b",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "name": "contactAgent",
+        "description": "Use this tool to search the internet.",
+        "workflowId": {
+          "__rl": true,
+          "value": "01MXwyIlx4SxllxQ",
+          "mode": "list",
+          "cachedResultName": "CONTACT ASSISTENT"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        40
+      ],
+      "id": "c0ecd0cc-b236-4118-81d8-193a5e8b8c9f",
+      "name": "Contact Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        180
+      ],
+      "id": "b969970e-72d8-4ae4-a47e-c1bc14e726f4",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "name": "calendarAgent",
+        "description": "Call this tool for any calendar action.",
+        "workflowId": {
+          "__rl": true,
+          "value": "4uFng2Xlo8irWnOp",
+          "mode": "list",
+          "cachedResultName": "CALENDAR ASSISTENT"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        640,
+        100
+      ],
+      "id": "a3243655-ee87-446c-8271-1f7f1ee131b0",
+      "name": "Calendar Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6e48be98-a33e-4b64-84ca-2d53c837866b",
+      "name": "Set 'Text'",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        360,
+        -680
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b21fa5a5-0857-4db2-9415-4eeb1d85627d",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        60,
+        -780
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "754717a1-faa5-4f38-8ee2-e6075534e9a4",
+      "name": "Download File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        360,
+        -900
+      ],
+      "webhookId": "83bb7385-33f6-4105-8294-1a91c0ebbee5",
+      "credentials": {
+        "telegramApi": {
+          "id": "Y3AsNlIFgWVG7hIY",
+          "name": "My Assistent Natalia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "ddd9b609-7dd7-4989-86a3-a83b1a98fe02",
+      "name": "Transcribe",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        540,
+        -900
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "HIcTxeCBvkfyZgZp",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=Ты — AI бизнес-помощник.  \nРаботаешь как правый мозг предпринимателя: чётко, быстро, по сути.\n\n🎯 Твоя задача — помогать принимать решения, систематизировать действия, убирать хаос и удерживать фокус на главном.  \nТы не болтаешь. Ты решаешь. Ты не подстраиваешься. Ты упрощаешь сложное.\n\n🛠️ Что ты умеешь:\n– Вести задачи, приоритеты, цели, дедлайны  \n– Работать с календарём: встречи, контрольные точки, напоминания  \n– Структурировать идеи и действия: что, когда, зачем  \n– Составлять списки: покупок, задач, дел, шагов, инвестиций  \n– Отслеживать движение денег: расходы, возвраты, закупки, выплаты  \n– Генерировать тексты: сообщения, промо, посты, ответы клиентам  \n– Помогать в планировании производства, логистики, поставок  \n– Считать: бюджеты, маржу, себестоимость, доход\n\n📌 Как ты работаешь:\n– Если задача неясна — уточняешь  \n– Если вижу повторяющийся хаос — предлагаешь решение  \n– Если нужна структура — строишь  \n– Если поступил запрос — сначала **выясни суть**, потом **выдай действие**\n\n📋 Примеры запросов:\n– “Напомни оплатить ткань через 2 дня в 10:00”  \n– “Что я должен сделать по запуску на Ozon?”  \n– “Распиши логистику пошива от закупки ткани до отгрузки”  \n– “Сделай описание костюма для карточки на маркетплейс”  \n– “Подсчитай, сколько выйдет себестоимость партии из 60 костюмов”  \n– “Проверь, какие расходы я не зафиксировал”\n\n📎 Стандарты:\n– Коротко. Точно. Без воды.  \n– Без эмоций, но с заботой о результате  \n– Если можно автоматизировать — предложи  \n– Если вижу пробел — предупреждаю\n\n⏰ Если дата/время не указано — спрашивай  \n💬 Если запрос туманный — уточни  \n🧠 Всегда веди к действию\n\nТы не помощник \"на поболтать\".  \nТы — помощник \"на результат\".\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        740,
+        -580
+      ],
+      "id": "0b355e39-a3b2-4e07-b188-4b5751f0620e",
+      "name": "БИЗНЕС АССИСТЕНТ"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "contextWindowLength": 30
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        160
+      ],
+      "id": "131080aa-f17a-476d-a7ba-7ecf11c320ad",
+      "name": "Window Buffer Memory1"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to search the internet.",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n\"api_key\": \"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\",\n\"query\": \"{searchTerm}\",\n\"search_depth\": \"advanced\",\n\"include_answer\": true,\n\"topic\": \"general\",\n\"include_raw_content\": true,\n\"max_results\": 5\n}",
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchTerm",
+              "description": "What the user has requested to search the internet for",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        -360
+      ],
+      "id": "8add3023-36b5-4bea-aa38-cceec9fb6c73",
+      "name": "Tavily1"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "c4948221-f180-4015-a45a-22ae45e1e206",
+      "name": "Telegram Trigger1",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -220,
+        -800
+      ],
+      "webhookId": "99eab1a0-569d-4f0f-a49e-578a02abfe63",
+      "credentials": {
+        "telegramApi": {
+          "id": "Y3AsNlIFgWVG7hIY",
+          "name": "My Assistent Natalia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "b6de6ac5-730b-44a0-be9f-cac6e1bb1a35",
+      "name": "Response1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        -660
+      ],
+      "webhookId": "5dced4b9-5066-4036-a4d4-14fc07edd53c",
+      "credentials": {
+        "telegramApi": {
+          "id": "Y3AsNlIFgWVG7hIY",
+          "name": "My Assistent Natalia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        120
+      ],
+      "id": "dc67e1eb-50a1-47a0-897a-ca2462ad99f8",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "HIcTxeCBvkfyZgZp",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set 'Text'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set 'Text'": {
+      "main": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe": {
+      "main": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "БИЗНЕС АССИСТЕНТ": {
+      "main": [
+        [
+          {
+            "node": "Response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily1": {
+      "ai_tool": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "БИЗНЕС АССИСТЕНТ",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 1,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

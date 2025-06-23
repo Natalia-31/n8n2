@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "PORT": "5678"
+    }
+  },
+  "deploy": {
+    "startCommand": "n8n start"
+  }
+}
