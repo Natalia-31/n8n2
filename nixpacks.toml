@@ -1,0 +1,6 @@
+[phases.setup]
+nixPkgs = ['nodejs']
+
+[start]
+cmd = "npx n8n user-management:reset && npx n8n start"
+
