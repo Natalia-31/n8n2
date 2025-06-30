@@ -1,1 +1,1 @@
-FROM n8nio/n8n:latest
+CMD ["sh", "-c", "npx n8n user-management:reset && n8n"]
