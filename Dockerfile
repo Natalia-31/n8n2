@@ -1,3 +1,4 @@
-FROM n8nio/n8n
+FROM n8nio/n8n:1.68.3
 
 ENTRYPOINT ["sh", "-c", "npx n8n user-management:reset && n8n"]
+
